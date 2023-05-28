@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 
@@ -8,6 +9,7 @@ session_start();
   {
     $user_name = $_POST['user_name'];
     $password = $_POST['password'];
+    $encrypt = md5($password);
 
     if(!empty($user_name) && !empty($password) && !is_numeric($user_name))
     {
@@ -20,7 +22,7 @@ session_start();
             {
                 $user_data = mysqli_fetch_assoc($result);
 
-                if($user_data['password'] == $password)
+                if($user_data['password'] == $encrypt )
                 {
                     $_SESSION['users_id'] = $user_data['users_id'];
                     header("Location: index.php");
@@ -28,28 +30,26 @@ session_start();
                 }
             }
         }
-        echo "Wrong username or password!";
+        //echo "Wrong username or password!";
     }else{
-        echo "Please enter your username or password!";
+        //echo "Please enter your username or password!";
     }
   }
 ?>
+
 <!--------------LOGIN PAGE----------->
 
-<style>
-
-</style>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en">                                
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sports Complex</title>
-    <link rel="icon" href="/Logo/Seal_of_Santa_Rosa,_Laguna.png">
-    <link rel="stylesheet" href="https//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"> 
-    <link rel="stylesheet" href="styles.css">
-    <img class="Logo" src="Logo/Seal_of_Santa_Rosa,_Laguna.png">   
+    <link rel="icon" href="Logo/Seal_of_Santa_Rosa,_Laguna.png">
+    <link rel="stylesheet" href="style.css">
+    <img class="Logo" src="Logo/Seal_of_Santa_Rosa,_Laguna.png">  
+    <script src="https://kit.fontawesome.com/2bbac3a66c.js" crossorigin="anonymous" ></script> 
 
     <div class="H1">
         <p>City Government of Santa Rosa Laguna<br>Santa Rosa Multi-Purpose Complex<br>4026</p>
@@ -57,23 +57,46 @@ session_start();
 </head>
 <body>
     
-    <div class="container">
-        <div class="header">LOGIN</div>
-            <form method="POST">
-                <input id="email" type="text" name="user_name" placeholder="Email" >
-                <input id="pass"type="password" name="password" placeholder="Password" >    
-                <a href="#">Forgot Password?</a><br><br><br>
-                <button type="submit">Login</button></a>
-               
-            </form>
-            <a href="sign-up.php"><button type="signup" id="btn2">Signup</button></a>
-    </div>
+    <form  id="create-account-form2" name="form" action="login.php" onsubmit="return isvalid()" method="POST">
+        <div class="title">
+            <h2>LOGIN</h2>
+        </div>
+        <!-- FNAME -->
+        <div class="input-group2">
+            <label for="username"></label>
+            <input type="text" id="username" placeholder="Username" name="user_name">
+            <p class="fas fa-exclamation-circle">Error Message</p>
+        </div>
+        <!-- LNAME -->
+        <div class="input-group2">
+            <label for="password"></label>
+            <input type="password" id="password" placeholder="Password" name="password">
+            <p class="fas fa-exclamation-circle">Error Message</p>
+        </div>
 
-<!-----
+        <button type="submit" class="btn">Submit</button> 
+
+        <a href="signup.php"><button id="btn">Signup</button></a>
+    </form>
+   
+</div>  
+
+<script>
+    const cancelButton = document.getElementById('btn');
+    cancelButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.location.href = 'signup.php';
+    });
+</script>
+
+<script 
+        src="login.js">
+    </script>
+    <!--
     <script>
             function isvalid(){
-                var user= document.form.user_name.value;
-                var pass= document.form.password.value;
+                var user = document.form.user_name.value;
+                var pass = document.form.password.value;
                 if(user.length=="" && pass.length==""){
                     alert("Please enter your Username and Password");
                     return false;
